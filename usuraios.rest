@@ -10,6 +10,9 @@ GET http://localhost:3030/usuarios/2 HTTP/1.1
 POST http://localhost:3030/usuarios HTTP/1.1
 content-type: application/json
 {
-        "nombre": "asdasdasd",
-        "email": "asdasdasd@rovert.com",
+        "nombre": "xxxxxxxxxxx",
+        "email": "xxxxxxxxxx@rovert.com",
 }
+
+###
+PUT http://localhost:3030/usuarios/18 HTTP/1.1
