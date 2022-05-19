@@ -1,9 +1,12 @@
 const express = require("express");
 const cors = require("cors");
-const usuarios = require("./routes/usuarios");
+
 const db = require("./db/database");
 const app = express();
 const port = process.env.port || 3030;
+
+const usuarios = require("./routes/usuarios");
+const user = require("./routes/user");
 
     (async () => {
         try{
@@ -21,6 +24,7 @@ const port = process.env.port || 3030;
  app.use(cors());
 
  app.use("/usuarios", usuarios);
+ app.use("/user", user);
 
 app.listen(port,() => {
     console.log('server serror:', port);

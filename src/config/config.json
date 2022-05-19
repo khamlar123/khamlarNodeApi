@@ -2,21 +2,21 @@
   "development": {
     "username": "root",
     "password": null,
-    "database": "database_development",
+    "database": "usuario_db",
     "host": "locahost",
     "dialect": "mysql"
   },
   "test": {
     "username": "root",
     "password": null,
-    "database": "database_test",
+    "database": "usuario_db",
     "host": "locahost",
     "dialect": "mysql"
   },
   "production": {
     "username": "root",
     "password": null,
-    "database": "database_production",
+    "database": "usuario_db",
     "host": "locahost",
     "dialect": "mysql"
   }
