@@ -1,12 +1,8 @@
 const express = require("express");
 const cors = require("cors");
-
 const db = require("./db/database");
 const app = express();
 const port = process.env.port || 3030;
-
-const usuarios = require("./routes/usuarios");
-const user = require("./routes/user");
 
     (async () => {
         try{
@@ -19,12 +15,15 @@ const user = require("./routes/user");
      
     })();
 
-
+// router 
  app.use(express.json());
  app.use(cors());
+ app.use(express.urlencoded({extended: true}))
+ const router = require('./routes/index');
+ app.use('/api', router);
 
- app.use("/usuarios", usuarios);
- app.use("/user", user);
+
+
 
 app.listen(port,() => {
     console.log('server serror:', port);
