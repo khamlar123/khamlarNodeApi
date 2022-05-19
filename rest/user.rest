@@ -1,10 +1,10 @@
-GET http://localhost:3030/user HTTP/1.1
+GET http://localhost:3030/api/user/get-user HTTP/1.1
 
 ###
-GET http://localhost:3030/user/2 HTTP/1.1
+GET http://localhost:3030/api/user/1 HTTP/1.1
 
 ###
-POST http://localhost:3030/user HTTP/1.1
+POST http://localhost:3030/api/user/add-user HTTP/1.1
 content-type: application/json
 {
     "firstName": "khamlar",
@@ -13,4 +13,6 @@ content-type: application/json
 }
 
 ###
-DELETE http://localhost:3030/user/19 HTTP/1.1
+DELETE http://localhost:3030/api/user/2 HTTP/1.1
+
+PUT http://localhost:3030/api/user/edit-user HTTP/1.1

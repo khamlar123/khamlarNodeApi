@@ -3,21 +3,21 @@
     "username": "root",
     "password": null,
     "database": "usuario_db",
-    "host": "locahost",
+    "host": "localhost",
     "dialect": "mysql"
   },
   "test": {
     "username": "root",
     "password": null,
     "database": "usuario_db",
-    "host": "locahost",
+    "host": "localhost",
     "dialect": "mysql"
   },
   "production": {
     "username": "root",
     "password": null,
     "database": "usuario_db",
-    "host": "locahost",
+    "host": "localhost",
     "dialect": "mysql"
   }
 }
