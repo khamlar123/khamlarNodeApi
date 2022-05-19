@@ -1,0 +1,16 @@
+GET http://localhost:3030/user HTTP/1.1
+
+###
+GET http://localhost:3030/user/2 HTTP/1.1
+
+###
+POST http://localhost:3030/user HTTP/1.1
+content-type: application/json
+{
+    "firstName": "khamlar",
+    "lastName":"aaabbccddd",
+    "email":"1234@1234.com"
+}
+
+###
+DELETE http://localhost:3030/user/19 HTTP/1.1
