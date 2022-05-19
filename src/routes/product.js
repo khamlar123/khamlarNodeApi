@@ -18,7 +18,6 @@ const ProductDetails = db.define('Product_details', {
 const addProduct = async (req, res) => {
     var  {prodName, price, qty, dsc, variand} = req.body;
     const product = await Products.create({prodName, price, qty});
-
     if(product.id > 0){
         let id = product.id;
         await ProductDetails.create({dsc, variand,productId: id});
@@ -33,12 +32,9 @@ const findAll = async (req, res) => {
 
 const findOne = async (req, res) => {
     let {id} = req.params;
-
     const product = await Products.findOne({where:{id:id}});
     res.status(200).json(product);
 }
-
-
 
 const deleteProduct = async (req, res) => {
     let {id} = req.params;
