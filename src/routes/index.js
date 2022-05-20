@@ -10,10 +10,12 @@ router.get('/user/:id', userController.findOne);
 router.put('/user/edit-user', userController.updateUser);
 
 router.get('/product/get-product', productController.findAll);
+router.get('/product/get-product-active', productController.findOnlyActive);
 router.post('/product/add-product', productController.addProduct);
 router.delete('/product/:id', productController.deleteProduct);
 router.get('/product/:id', productController.findOne);
 router.put('/product/edit-product', productController.updateProduct);
+
 
 
 module.exports = router

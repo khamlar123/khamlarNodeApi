@@ -1,12 +1,13 @@
 
-const {  DataTypes } = require("sequelize");
+const {  DataTypes, where } = require("sequelize");
 const db = require("../db/database");
 
 // convert model res
 const Products = db.define('Product', {
     prodName: DataTypes.STRING,
     price: DataTypes.DOUBLE,
-    qty: DataTypes.INTEGER
+    qty: DataTypes.INTEGER,
+    active: DataTypes.BOOLEAN,
 });
 
 const ProductDetails = db.define('Product_details', {
@@ -16,8 +17,8 @@ const ProductDetails = db.define('Product_details', {
 });
 
 const addProduct = async (req, res) => {
-    var  {prodName, price, qty, dsc, variand} = req.body;
-    const product = await Products.create({prodName, price, qty});
+    var  {prodName, price, qty, dsc, variand, active} = req.body;
+    const product = await Products.create({prodName, price, qty, active});
     if(product.id > 0){
         let id = product.id;
         await ProductDetails.create({dsc, variand,productId: id});
@@ -30,11 +31,28 @@ const findAll = async (req, res) => {
     const details = await  ProductDetails.findAll();
 
     if(products && details){
-
-        res.status(200).json({products, details});
+       products.forEach(f => {
+          const del = details.find(ff => ff.productId == f.id);
+          f.dataValues.dsc = del.dataValues.dsc;
+          f.dataValues.variand = del.dataValues.variand;
+        //   f.dataValues.detail = del.dataValues;
+      });
+        res.status(200).json(products);
     }
+}
 
-  
+const findOnlyActive = async (req, res) => {
+    const products = await  Products.findAll({where:{active: true}});
+    const details = await  ProductDetails.findAll();
+    if(products && details){
+        products.forEach(f => {
+           const del = details.find(ff => ff.productId == f.id);
+           f.dataValues.dsc = del.dataValues.dsc;
+           f.dataValues.variand = del.dataValues.variand;
+         //   f.dataValues.detail = del.dataValues;
+       });
+         res.status(200).json(products);
+     }
 }
 
 const findOne = async (req, res) => {
@@ -54,16 +72,22 @@ const findOne = async (req, res) => {
     }else{
         res.status(500).send('error');
     }
-    
 }
 
 const deleteProduct = async (req, res) => {
     let {id} = req.params;
-
-    await Products.destroy({where: {id:id}});
-    // const deleteList =  await Products.destroy({where: {id:[1,2,3,4]}});
-    res.status(200).json('is deleted !');
+    const findItem = await Products.findOne({where:{id: id}});
+    if(findItem){
+        const updaModal = {
+            active: false
+        }
+        await Products.update(updaModal,{where:{id:id}})
+        res.status(200).json('is deleted !');
+    }else{
+        res.status(500).json('is error !');
+    }
 }
+
 
 const updateProduct = async (req, res) => {
     const model = {id, firstName, lastName, email} = req.body;
@@ -76,14 +100,11 @@ const updateProduct = async (req, res) => {
     }
 }
 
-
-// one to one 
-
-
 module.exports = {
     addProduct,
     findAll,
     findOne,
     deleteProduct,
-    updateProduct
+    updateProduct,
+    findOnlyActive
   };

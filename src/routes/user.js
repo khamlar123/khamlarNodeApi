@@ -51,5 +51,5 @@ module.exports = {
   findAll,
   findOne,
   deleteUser,
-  updateUser
+  updateUser,
 };
