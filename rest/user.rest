@@ -15,4 +15,13 @@ content-type: application/json
 ###
 DELETE http://localhost:3030/api/user/2 HTTP/1.1
 
+###
+
 PUT http://localhost:3030/api/user/edit-user HTTP/1.1
+Content-Type: : application/json
+{
+    "id": 3,
+    "firstName": "khamlar33333333333",
+    "lastName":"aaabbccddd",
+    "email":"1234@1234.com"
+}

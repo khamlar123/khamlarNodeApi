@@ -28,7 +28,7 @@ module.exports = {
       active: {
         allowNull: false,
         type: Sequelize.BOOLEAN,
-        default: true
+        defaultValue: true
       }
     });
   },
