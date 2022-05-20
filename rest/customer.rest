@@ -1,0 +1,36 @@
+
+#Get All customer
+GET http://localhost:3030/api/customer/get-customer HTTP/1.1
+###
+
+#Get Only 1 item
+GET http://localhost:3030/api/customer/1 HTTP/1.1
+###
+
+# Add customer
+POST http://localhost:3030/api/customer/add-customer HTTP/1.1
+content-type: application/json
+{
+    "fristName": "prodName",
+    "lastName":"aadsad",
+    "email":"asdasd",
+    "phoneNo": "0209999999",
+
+}
+###
+
+#Delete customer
+DELETE http://localhost:3030/api/customer/2 HTTP/1.1
+###
+
+#Update customer
+PUT http://localhost:3030/api/product/edit-customer HTTP/1.1
+Content-Type: : application/json
+{
+    "id": 1,
+    "fristName": "prodName",
+    "lastName":"aadsad",
+    "email":"asdasd",
+    "phoneNo": "0209999999",
+}
+###
