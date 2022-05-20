@@ -1,5 +1,5 @@
 
-const {  DataTypes, where } = require("sequelize");
+const {  DataTypes } = require("sequelize");
 const db = require("../db/database");
 
 // convert model res
@@ -16,6 +16,7 @@ const ProductDetails = db.define('Product_details', {
     productId: DataTypes.INTEGER,
 });
 
+
 const addProduct = async (req, res) => {
     var  {prodName, price, qty, dsc, variand, active} = req.body;
     const product = await Products.create({prodName, price, qty, active});
@@ -29,15 +30,22 @@ const addProduct = async (req, res) => {
 const findAll = async (req, res) => {
     const products = await  Products.findAll();
     const details = await  ProductDetails.findAll();
-
     if(products && details){
-       products.forEach(f => {
-          const del = details.find(ff => ff.productId == f.id);
-          f.dataValues.dsc = del.dataValues.dsc;
-          f.dataValues.variand = del.dataValues.variand;
-        //   f.dataValues.detail = del.dataValues;
-      });
-        res.status(200).json(products);
+    //    products.forEach(f => {
+    //       const del = details.find(ff => ff.productId == f.id);
+    //       f.dataValues.dsc = del.dataValues.dsc;
+    //       f.dataValues.variand = del.dataValues.variand;
+    //     //   f.dataValues.detail = del.dataValues;
+    //   });
+    //     res.status(200).json(products);
+
+        const productList = products.map(prod => ({ 
+        ...prod.dataValues, 
+        ...(details.find(item => item.productId === prod.id).dataValues ?? {})
+        }));
+        res.status(200).json(productList)
+    }else{
+        res.status(500).send('error !');
     }
 }
 
@@ -45,14 +53,15 @@ const findOnlyActive = async (req, res) => {
     const products = await  Products.findAll({where:{active: true}});
     const details = await  ProductDetails.findAll();
     if(products && details){
-        products.forEach(f => {
-           const del = details.find(ff => ff.productId == f.id);
-           f.dataValues.dsc = del.dataValues.dsc;
-           f.dataValues.variand = del.dataValues.variand;
-         //   f.dataValues.detail = del.dataValues;
-       });
-         res.status(200).json(products);
-     }
+
+        const productList = products.map(prod => ({ 
+            ...prod.dataValues, 
+            ...(details.find(item => item.productId === prod.id).dataValues ?? {}) 
+            }));
+            res.status(200).json(productList)
+        }else{
+            res.status(500).send('error !');
+        }
 }
 
 const findOne = async (req, res) => {
@@ -67,6 +76,8 @@ const findOne = async (req, res) => {
                 qty: product.qty,
                 dsc: productDetails.dsc,
                 variand: productDetails.variand,
+                createdAt: productDetails.createdAt,
+                updatedAt: productDetails.updatedAt
         }
         res.status(200).json(resl);
     }else{
@@ -90,11 +101,15 @@ const deleteProduct = async (req, res) => {
 
 
 const updateProduct = async (req, res) => {
-    const model = {id, firstName, lastName, email} = req.body;
-    const findItem = await Products.findByPk(model.id);     
+    const model = {id, prodName, price, qty} = req.body;
+    const deltelModal = {dsc, variand} = req.body;
+
+    const findItem = await Products.findByPk(model.id);   
+      
     if(findItem){
      const updateRes = await Products.update(model, {where: {id:model.id}});
-     res.status(200).json(updateRes);
+     const detail = await ProductDetails.update(deltelModal, {where: {productId:model.id}});
+     (updateRes && detail)? res.status(200).send('Update Done !'): res.status(500).send('Update error!');
     }else{
       res.status(500).send('not have user');
     }
