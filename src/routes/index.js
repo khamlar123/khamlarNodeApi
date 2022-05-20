@@ -1,11 +1,15 @@
 
 const router = require('express').Router();
 // add router
+const loginController = require('./loginRoute');
 const userController = require('./userRoute');
 const productController = require('./productRoute');
 const customerController = require('./cutomerRoute');
 
 
+
+// url for login
+router.post('/login', loginController.login);
 // url for user
 router.get('/user/get-user', userController.findAll);
 router.get('/user/:id', userController.findOne);

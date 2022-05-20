@@ -1,18 +1,22 @@
 
 const {  DataTypes } = require("sequelize");
 const db = require("../db/database");
+const base64 = require('../security/endCode');
 
 // convert model res
 const database = db.define('Users', {
       firstName: DataTypes.STRING,
       lastName: DataTypes.STRING,
-      email: DataTypes.STRING
+      email: DataTypes.STRING,
+      password: DataTypes.STRING,
 })
 
 
-const addUser = async(req, res) => {
-    var model = req.body;
-    const user = await  database.create(model);
+const addUser = async (req, res) => {
+    const  {firstName, lastName, email, password} = req.body;
+    const endCode = base64.set(password.toString());
+    const key = (await endCode).toString() ;
+    const user = await  database.create({firstName, lastName, email, password: key});
     res.status(200).json(user);
 }
 

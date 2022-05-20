@@ -1,6 +1,8 @@
 
 const {  DataTypes } = require("sequelize");
 const db = require("../db/database");
+const decode = require('../security/endCode');
+
 
 // convert model res
 const Products = db.define('Product', {
@@ -28,6 +30,11 @@ const addProduct = async (req, res) => {
 }
 
 const findAll = async (req, res) => {
+
+   const key = decode.set('123456');
+
+    console.log(decode.get((await key).toString()));
+
     const products = await  Products.findAll();
     const details = await  ProductDetails.findAll();
     if(products && details){
