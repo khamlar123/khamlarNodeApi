@@ -39,15 +39,37 @@ const deleteUser = async(req, res) => {
 }
 
   const updateUser = async(req, res) => {
-    const model = {id, firstName, lastName, email} = req.body;
+    const model = {id, firstName, lastName, email, password} = req.body;
     const findItem = await database.findByPk(model.id);     
     if(findItem){
+      const endCode = base64.set(password.toString());
+      const key = (await endCode).toString();
+      model.password = key;
      const updateRes = await database.update(model, {where: {id:model.id}});
      res.status(200).json(updateRes);
     }else{
       res.status(500).send('not have user');
     }
   }
+
+  const changePassword = async (req, res) => {
+    const {email, password, newPassword} = req.body;
+    const findUser = await database.findOne({where:{email:email}})
+    if(findUser){
+      let decode = (await base64.get(findUser.dataValues.password)).toString();
+      if(decode === password){
+        const endCode = base64.set(newPassword.toString());
+        const key = (await endCode).toString();
+        const updatePassword = await database.update({password:key},{where: {email:email}});
+        res.status(200).json(updatePassword);
+      }
+
+    }else{
+      res.status(500).send('email ro password invalid')
+    }
+
+  }
+
 
 
 module.exports = {
@@ -56,4 +78,5 @@ module.exports = {
   findOne,
   deleteUser,
   updateUser,
+  changePassword
 };

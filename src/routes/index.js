@@ -5,17 +5,21 @@ const loginController = require('./loginRoute');
 const userController = require('./userRoute');
 const productController = require('./productRoute');
 const customerController = require('./cutomerRoute');
+const res = require('express/lib/response');
 
 
 
 // url for login
 router.post('/login', loginController.login);
+router.post('/reset-password', loginController.resetPassword);
 // url for user
 router.get('/user/get-user', userController.findAll);
 router.get('/user/:id', userController.findOne);
 router.put('/user/edit-user', userController.updateUser);
 router.post('/user/add-user', userController.addUser);
 router.delete('/user/:id', userController.deleteUser);
+router.put('/user/change-password', userController.changePassword);
+
 // url for product
 router.get('/product/get-product', productController.findAll);
 router.get('/product/get-product-active', productController.findOnlyActive);

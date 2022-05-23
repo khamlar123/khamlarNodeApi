@@ -14,21 +14,26 @@ const database = db.define('Users', {
   const login = async (req, res) => {
     const {email, password} = req.body;
     const findUser = await database.findOne({where:{email: email}})
+    let decode = (await base64.get(findUser.dataValues.password)).toString();
 
-     
-    if((await base64.get(findUser.dataValues.password)).toString() === password.toString()){
-      console.log('login !!!!!!!!!!!!!!!!');
-    }
-
-   console.log();
-    
-
-    res.status(200).json(findUser);
-
+    if( decode === password.toString()){
+      res.status(200).send('login !!!!!!!!!!!!!!!!');
+    }else{
+      res.status(500).send('login error');
+    } 
   }
 
-
+  const resetPassword = async (req, res) => {
+    const {email} = req.body;
+    const findUser = await database.findOne({where: {email:email}})
+    if(findUser){
+      res.status(200).send('reset password done!')
+    }else{
+      res.status(500).send('email invalid !')
+    }
+  }  
 
 module.exports = {
-  login
+  login,
+  resetPassword
 };

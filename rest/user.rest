@@ -19,9 +19,16 @@ DELETE http://localhost:3030/api/user/2 HTTP/1.1
 
 PUT http://localhost:3030/api/user/edit-user HTTP/1.1
 Content-Type: : application/json
+Token: 
+Method:
 {
+
     "id": 3,
     "firstName": "khamlar33333333333",
     "lastName":"aaabbccddd",
-    "email":"1234@1234.com"
+    "email":"1234@1234.com",
+    "password": "123456"
 }
+###
+
+POST http://localhost:3030/api/login HTTP/1.1
