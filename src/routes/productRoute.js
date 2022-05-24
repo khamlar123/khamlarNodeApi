@@ -60,7 +60,6 @@ const findOnlyActive = async (req, res) => {
     const products = await  Products.findAll({where:{active: true}});
     const details = await  ProductDetails.findAll();
     if(products && details){
-
         const productList = products.map(prod => ({ 
             ...prod.dataValues, 
             ...(details.find(item => item.productId === prod.id).dataValues ?? {}) 

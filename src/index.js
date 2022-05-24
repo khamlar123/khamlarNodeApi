@@ -7,7 +7,10 @@ const port = process.env.port || 3030;
 (async () => {
     try{
         await db.authenticate(); 
-        await db.sync(); 
+        
+        // auto sync table no use migrations 
+        // await db.sync(); 
+
         console.log("connectados a la base de datos"); 
     }catch(error){
         throw new Error(error);

@@ -5,8 +5,6 @@ const loginController = require('./loginRoute');
 const userController = require('./userRoute');
 const productController = require('./productRoute');
 const customerController = require('./cutomerRoute');
-const res = require('express/lib/response');
-
 
 
 // url for login
@@ -19,7 +17,6 @@ router.put('/user/edit-user', userController.updateUser);
 router.post('/user/add-user', userController.addUser);
 router.delete('/user/:id', userController.deleteUser);
 router.put('/user/change-password', userController.changePassword);
-
 // url for product
 router.get('/product/get-product', productController.findAll);
 router.get('/product/get-product-active', productController.findOnlyActive);
@@ -33,7 +30,5 @@ router.get('/customer/:id', customerController.findOne);
 router.put('/customer/edit-customer', customerController.updateCustomer);
 router.post('/customer/add-customer', customerController.addCustomer);
 router.delete('/customer/:id', customerController.deleteCustomer);
-
-
 
 module.exports = router
