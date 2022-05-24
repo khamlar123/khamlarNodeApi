@@ -5,14 +5,14 @@ const decode = require('../security/endCode');
 
 
 // convert model res
-const Products = db.define('Product', {
+const Products = db.define('products', {
     prodName: DataTypes.STRING,
     price: DataTypes.DOUBLE,
     qty: DataTypes.INTEGER,
     active: DataTypes.BOOLEAN,
 });
 
-const ProductDetails = db.define('Product_details', {
+const ProductDetails = db.define('product_details', {
     dsc: DataTypes.STRING,
     variand: DataTypes.STRING,
     productId: DataTypes.INTEGER,
@@ -38,14 +38,6 @@ const findAll = async (req, res) => {
     const products = await  Products.findAll();
     const details = await  ProductDetails.findAll();
     if(products && details){
-    //    products.forEach(f => {
-    //       const del = details.find(ff => ff.productId == f.id);
-    //       f.dataValues.dsc = del.dataValues.dsc;
-    //       f.dataValues.variand = del.dataValues.variand;
-    //     //   f.dataValues.detail = del.dataValues;
-    //   });
-    //     res.status(200).json(products);
-
         const productList = products.map(prod => ({ 
         ...prod.dataValues, 
         ...(details.find(item => item.productId === prod.id).dataValues ?? {})

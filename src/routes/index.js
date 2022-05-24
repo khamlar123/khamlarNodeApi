@@ -5,7 +5,7 @@ const loginController = require('./loginRoute');
 const userController = require('./userRoute');
 const productController = require('./productRoute');
 const customerController = require('./cutomerRoute');
-
+const invoiceController = require('./invoiceRoute');
 
 // url for login
 router.post('/login', loginController.login);
@@ -30,5 +30,10 @@ router.get('/customer/:id', customerController.findOne);
 router.put('/customer/edit-customer', customerController.updateCustomer);
 router.post('/customer/add-customer', customerController.addCustomer);
 router.delete('/customer/:id', customerController.deleteCustomer);
+//url for invoice
+router.get('/invoice/get-invoices',invoiceController.findAll);
+// router.get('/invoice/:id', invoiceController.findOne);
+router.post('/invoice/add-invoice', invoiceController.makeInvoice);
+
 
 module.exports = router
