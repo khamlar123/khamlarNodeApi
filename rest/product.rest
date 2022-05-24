@@ -20,7 +20,7 @@ content-type: application/json
     "qty":10,
     "dsc": "sdasasd",
     "variand": "asdasd",
-    "active": true,
+    "active": true
 }
 ###
 
