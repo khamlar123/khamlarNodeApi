@@ -32,7 +32,7 @@ router.post('/customer/add-customer', customerController.addCustomer);
 router.delete('/customer/:id', customerController.deleteCustomer);
 //url for invoice
 router.get('/invoice/get-invoices',invoiceController.findAll);
-// router.get('/invoice/:id', invoiceController.findOne);
+router.get('/invoice/:id', invoiceController.findOne);
 router.post('/invoice/add-invoice', invoiceController.makeInvoice);
 
 

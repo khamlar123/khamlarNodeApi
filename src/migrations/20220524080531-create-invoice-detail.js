@@ -12,7 +12,20 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       productId: {
+        allowNull: false,
         type: Sequelize.INTEGER
+      },
+      qty: {
+        allowNull: false,
+        type:Sequelize.INTEGER
+      },
+      price: {
+        allowNull: false,
+        type:Sequelize.DOUBLE
+      },
+      productName: {
+        allowNull: false,
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,

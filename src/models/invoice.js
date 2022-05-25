@@ -20,7 +20,8 @@ module.exports = (sequelize, DataTypes) => {
     invoiceType: DataTypes.INTEGER,
     bankName: DataTypes.STRING,
     userId: DataTypes.INTEGER,
-    discount: DataTypes.DOUBLE
+    discount: DataTypes.DOUBLE,
+    cutomerId: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'invoices',

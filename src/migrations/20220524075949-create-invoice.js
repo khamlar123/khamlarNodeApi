@@ -29,6 +29,9 @@ module.exports = {
       discount: {
         type: Sequelize.DOUBLE
       },
+      cutomerId: {
+        type:Sequelize.INTEGER
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
