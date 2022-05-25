@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   invoice.init({
     invocieNo: DataTypes.STRING,
     total: DataTypes.DOUBLE,
-    status: DataTypes.INTEGER,
+    status: DataTypes.INTEGER, //0 cancel //1 normal
     invoiceType: DataTypes.INTEGER,
     bankName: DataTypes.STRING,
     userId: DataTypes.INTEGER,

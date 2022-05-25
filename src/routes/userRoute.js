@@ -21,7 +21,12 @@ const addUser = async (req, res) => {
 }
 
 const findAll = async (req, res) => {
-    const users = await  database.findAll();
+  const {count, skip} = req.params;
+    const users = await  database.findAndCountAll({
+      where:{},
+      offset: Number(skip),
+      limit: Number(count),
+    });
     res.status(200).json(users);
 }
 

@@ -1,5 +1,7 @@
-const {  DataTypes } = require("sequelize");
+const { json } = require("express/lib/response");
+const {  DataTypes, and, where } = require("sequelize");
 const db = require("../db/database");
+const invoice = require("../models/invoice");
 
 // convert model res
 const Invoices = db.define('invoices', {
@@ -22,37 +24,52 @@ const Invoice_details = db.define('invoice_details', {
 
 
 const makeInvoice = async (req, res) => {   
-    const {total,status,invoiceType,bankName,userId,discount,cutomerId, productList} = req.body;
 
-    const getLastInvoice = await Invoices.findAll();
-    let lastd = 0 ;
+    try{
+        const {total,status,invoiceType,bankName,userId,discount,cutomerId, productList} = req.body;
 
-    if(getLastInvoice.length == 0){
-        lastd =1; 
-    }else{
-         const id = Number(getLastInvoice[getLastInvoice.length - 1].dataValues.invocieNo);
-         lastd =  (id+1);
-    }
-    const addInvoice = await Invoices.create({
-        invocieNo: lastd.toString(), total:total, status: status, invoiceType: invoiceType,
-        bankName:bankName, userId:userId, cutomerId:cutomerId, discount:discount
-    })
+        const getLastInvoice = await Invoices.findAll();
+        let lastd = 0 ;
+    
+        if(getLastInvoice.length == 0){
+            lastd =1; 
+        }else{
+             const id = Number(getLastInvoice[getLastInvoice.length - 1].dataValues.invocieNo);
+             lastd =  (id+1);
+        }
+        const addInvoice = await Invoices.create({
+            invocieNo: lastd.toString(), total:total, status: status, invoiceType: invoiceType,
+            bankName:bankName, userId:userId, cutomerId:cutomerId, discount:discount
+        })
+    
+        if(addInvoice){
 
-    if(addInvoice){
-        productList.forEach(p => {
-           const addDetail = Invoice_details.create({invocieId: addInvoice.id, productId: p.productId, qty:p.qty,price:p.price,productName:p.productName});
-           if(!addDetail){
-                res.status(500).json('add invoice error !');
-           }
-        });
-        res.status(200).json('add invoice done !');
-    }else{
-        res.status(500).json('add invoice error !');
+            productList.forEach(p => {
+               const addDetail = Invoice_details.create({invocieId: addInvoice.id, productId: p.productId, qty:p.qty,price:p.price,productName:p.productName});
+               if(!addDetail){
+                    res.status(500).json('add invoice error !');
+               }
+            });
+
+            res.status(200).json({
+                message: "invoice created",
+                getLastInvoice,
+            });
+
+        }else{
+            res.status(500).json('add invoice error !');
+        }
+    }catch{
+        res.status(500).json({
+            message: "invoice not successful created",
+            error: error.mesage,
+          })
     }
    
 }
 
 const findOne = async (req, res) => {
+    try{
         let {id} = req.params;
     const getInvoice = await Invoices.findOne({where:{id:id}});
 
@@ -72,25 +89,18 @@ const findOne = async (req, res) => {
         }else{
             res.status(500).json('error');
         }
+    }catch (error){
+        res.status(500).json(error);
+    }
 }
 
 const findAll = async (req, res) => {
+try{
     const invoice = await Invoices.findAll();
     const invoiceDetail = await Invoice_details.findAll();
     const resl = [] = [];
     if(invoice){
-
-        model = { 
-            id: 0,
-            invocieNo: '',
-            total: 0,
-            status: 0,
-            invoiceType: 0,
-            bankName: '',
-            userId: 0,
-            discount: 0,
-        }
-        
+        let model = {}
         invoice.forEach(e => {
             model.id = e.id;
             model.invocieNo = e.invocieNo;
@@ -101,11 +111,46 @@ const findAll = async (req, res) => {
             model.userId = e.userId;
             model.discount = e.discount;
             model.createdAt = e.createdAt;
-            model.updatedAt= e.updatedAt;
             model.productList = invoiceDetail.filter(f => f.invocieId === e.id).map(m => {return {
                 id: m.id,
-                invocieId: m.invocieId,
                 productId: m.productId,
+                productName: m.productName,
+                qty: m.qty,
+                price: m.price,
+            }})
+            
+            resl.push(model);
+            model = {};
+        });
+        res.status(200).json(resl);
+    }else{
+        res.status(500).json('error'); 
+    }
+}catch (error){
+    json.status(500).json(error)
+}
+}
+
+const findNormalInvoice = async(req, res) => {
+    const invoice = await Invoices.findAll({where:{status:1}});
+    const invoiceDetail = await Invoice_details.findAll();
+    const resl = [] = [];
+    if(invoice){
+        let model = {}
+        invoice.forEach(e => {
+            model.id = e.id;
+            model.invocieNo = e.invocieNo;
+            model.total = e.total;
+            model.status = e.status;
+            model.invoiceType = e.invoiceType;
+            model.bankName = e.bankName;
+            model.userId = e.userId;
+            model.discount = e.discount;
+            model.createdAt = e.createdAt;
+            model.productList = invoiceDetail.filter(f => f.invocieId === e.id).map(m => {return {
+                id: m.id,
+                productId: m.productId,
+                productName: m.productName,
                 qty: m.qty,
                 price: m.price,
             }})
@@ -119,8 +164,62 @@ const findAll = async (req, res) => {
     }
 }
 
+const findCancelInvoice = async(req, res) => {
+    const invoice = await Invoices.findAll({where:{status: 0}});
+    const invoiceDetail = await Invoice_details.findAll();
+    const resl = [] = [];
+    if(invoice){
+        let model = {}
+        invoice.forEach(e => {
+            model.id = e.id;
+            model.invocieNo = e.invocieNo;
+            model.total = e.total;
+            model.status = e.status;
+            model.invoiceType = e.invoiceType;
+            model.bankName = e.bankName;
+            model.userId = e.userId;
+            model.discount = e.discount;
+            model.createdAt = e.createdAt;
+            model.productList = invoiceDetail.filter(f => f.invocieId === e.id).map(m => {return {
+                id: m.id,
+                productId: m.productId,
+                productName: m.productName,
+                qty: m.qty,
+                price: m.price,
+            }})
+            
+            resl.push(model);
+            model = {};
+        });
+        res.status(200).json(resl);
+    }else{
+        res.status(500).json('error'); 
+    }
+}
+
+
+const cancelInvoice = async (req, res) => {
+    try{
+        
+        const fidnitem = await Invoices.findOne({where:{id:req.params.id}});
+
+        if(fidnitem){
+            await Invoices.update({status: 0}, {where:{id: req.params.id}});
+            res.status(200).json('cancel invoice done !');
+        }else{
+            res.status(500).json('cancel invoice error !'); 
+        }
+
+    }catch(error){
+        res.status(200).json(err);
+    }
+}
+
 module.exports = {
     makeInvoice,
     findOne,
-    findAll
+    findAll,
+    findNormalInvoice,
+    findCancelInvoice,
+    cancelInvoice
 }

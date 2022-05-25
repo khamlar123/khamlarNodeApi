@@ -11,7 +11,7 @@ const invoiceController = require('./invoiceRoute');
 router.post('/login', loginController.login);
 router.post('/reset-password', loginController.resetPassword);
 // url for user
-router.get('/user/get-user', userController.findAll);
+router.get('/users/get-user/:count/:skip', userController.findAll);
 router.get('/user/:id', userController.findOne);
 router.put('/user/edit-user', userController.updateUser);
 router.post('/user/add-user', userController.addUser);
@@ -33,7 +33,11 @@ router.delete('/customer/:id', customerController.deleteCustomer);
 //url for invoice
 router.get('/invoice/get-invoices',invoiceController.findAll);
 router.get('/invoice/:id', invoiceController.findOne);
+router.get('/invoices/get-invoicesnormal',invoiceController.findNormalInvoice);
+router.get('/invoices/get-invoicescancel',invoiceController.findCancelInvoice);
 router.post('/invoice/add-invoice', invoiceController.makeInvoice);
+router.put('/invoice/cancel-invoice/:id', invoiceController.cancelInvoice);
+
 
 
 module.exports = router
