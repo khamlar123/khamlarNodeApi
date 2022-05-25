@@ -1,5 +1,6 @@
+const res = require("express/lib/response");
 const { json } = require("express/lib/response");
-const {  DataTypes, and, where } = require("sequelize");
+const {  DataTypes, and, where, INTEGER } = require("sequelize");
 const db = require("../db/database");
 const invoice = require("../models/invoice");
 
@@ -69,29 +70,52 @@ const makeInvoice = async (req, res) => {
 }
 
 const findOne = async (req, res) => {
+    //mode 1
     try{
-        let {id} = req.params;
-    const getInvoice = await Invoices.findOne({where:{id:id}});
-
-        if(getInvoice){
-            const resModal = {
-                id: getInvoice.id,
-                invocieNo: getInvoice.invocieNo,
-                total: getInvoice.total,
-                status: getInvoice.status,
-                invoiceType: getInvoice.invoiceType,
-                bankName: getInvoice.bankName,
-                userId: getInvoice.userId,
-                discount: getInvoice.discount,
-                productList: await Invoice_details.findAll({where:{invocieId:id}})
-            }
-            res.status(200).json(resModal);
-        }else{
-            res.status(500).json('error');
+     const invoice =  await db.query("SELECT * FROM `invoices` WHERE id ="+req.params.id);
+     const invoiceDetail =  await db.query("SELECT id, invocieId , productId , qty,price,productName FROM invoice_details WHERE invocieId IN ("+req.params.id+")");
+        resl = {
+            "id": invoice[0][0].id,
+            "invocieNo": invoice[0][0].invocieNo,
+            "total": invoice[0][0].total,
+            "status": invoice[0][0].status,
+            "invoiceType": invoice[0][0].invoiceType,
+            "bankName": invoice[0][0].bankName,
+            "userId": invoice[0][0].userId,
+            "discount": invoice[0][0].discount,
+            "cutomerId": invoice[0][0].cutomerId,
+            "createdAt": invoice[0][0].createdAt,
+            "productList": invoiceDetail[0]
         }
+        res.status(200).json(resl);
     }catch (error){
         res.status(500).json(error);
     }
+
+    //mode 2
+    // try{
+    //     let {id} = req.params;
+    //     const getInvoice = await Invoices.findOne({where:{id:id}});
+
+    //     if(getInvoice){
+    //         const resModal = {
+    //             id: getInvoice.id,
+    //             invocieNo: getInvoice.invocieNo,
+    //             total: getInvoice.total,
+    //             status: getInvoice.status,
+    //             invoiceType: getInvoice.invoiceType,
+    //             bankName: getInvoice.bankName,
+    //             userId: getInvoice.userId,
+    //             discount: getInvoice.discount,
+    //             productList: await Invoice_details.findAll({where:{invocieId:id}})
+    //         }
+    //         res.status(200).json(resModal);
+    //     }else{
+    //         res.status(500).json('error');
+    //     }
+    // }catch (error){
+    //     res.status(500).json(error);
+    // }
 }
 
 const findAll = async (req, res) => {
