@@ -1,6 +1,5 @@
 
 const { sequelize, DataTypes } = require('../db/database');
-const product = require('../models/product');
 const Products = require('../models/product')(sequelize, DataTypes);
 const ProductDetails = require('../models/product_detail')(sequelize, DataTypes);
 const router = require('express').Router();
@@ -17,16 +16,13 @@ const fileStorageEngine = multer.diskStorage({
         const uniqueSuffix =  Date.now() + '-' + Math.round(Math.random() * 1E9)
         cb(null,  uniqueSuffix + '-' +  file.originalname)
       }
-
 }); 
 const upload = multer({ storage: fileStorageEngine});
-
 // router.post('/uploadfile', upload.single('image') , (req, res) => {
 //     console.log('xxxxxxxxxxxxxxxxxxxxxx',req.file);
 //     console.log('zzzzzzzzzzzzzzzzzzzzzz',req.body);
 //     res.send('done !');
 // })
-
 // end img
 
 router.post('/product/add-product', upload.single('image'), async(req, res) => {
@@ -49,7 +45,6 @@ router.put('/product/edit-product', upload.single('image'), async(req, res) => {
         const model = {id, prodName, price, qty} = req.body;
         const deltelModal = {id, dsc, variand} = req.body;
         const findItem = await Products.findByPk(model.id);   
-
         if(findItem){
         const updateRes = await Products.update({prodName: model.prodName,price: model.price, qty: model.qty,image: imgName}, {where: {id:model.id}});
         const detail = await ProductDetails.update(deltelModal, {where: {productId:model.id}});
@@ -57,7 +52,6 @@ router.put('/product/edit-product', upload.single('image'), async(req, res) => {
         }else{
         res.status(500).send('not have user');
         }
-
     }catch(err){
         res.status(500).json(err);
     }

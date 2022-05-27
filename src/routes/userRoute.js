@@ -24,7 +24,7 @@ route.post('/user/add-user', async(req, res) => {
     try{
         const  {firstName, lastName, email, password} = req.body;
         const endCode = base64.set(password.toString());
-        const key = (await endCode).toString() ;
+        const key = endCode.toString() ;
         await  User.create({firstName, lastName, email, password: key});
         res.status(200).json('add user done !');
     }catch (err){
@@ -61,7 +61,7 @@ route.put('/user/edit-user', async(req, res) => {
         const findItem = await User.findByPk(model.id);     
           if(findItem){
               const endCode = base64.set(password.toString());
-              const key = (await endCode).toString();
+              const key =  endCode.toString();
               model.password = key;
               const updateRes = await User.update(model, {where: {id:model.id}});
               res.status(200).json(updateRes);
@@ -78,10 +78,10 @@ route.post('/user/change-password', async(req, res) => {
           const {email, password, newPassword} = req.body;
           const findUser = await User.findOne({where:{email:email}})
           if(findUser){
-            let decode = (await base64.get(findUser.dataValues.password)).toString();
+            let decode = (base64.get(findUser.dataValues.password)).toString();
             if(decode === password){
               const endCode = base64.set(newPassword.toString());
-              const key = (await endCode).toString();
+              const key =  endCode.toString();
               const updatePassword = await User.update({password:key},{where: {email:email}});
               res.status(200).json(updatePassword);
             }else{

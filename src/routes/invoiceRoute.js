@@ -105,21 +105,14 @@ Invoices.belongsTo(Customer, {foreignKey: 'cutomerId'})
         }
     });
 
-// const cancelInvoice = async (req, res) => {
-//     try{
-        
-//         const fidnitem = await Invoices.findOne({where:{id:req.params.id}});
+    router.put('invoice/cancelInvoice/:id', async(req, res) => {
+        try{            
+            const cancel = await Invoices.update({status: 0}, {where:{id: req.params.id}});
+            (cancel)? res.status(200).json('cancel invoice done !'): res.status(500).json('cancel invoice error !');
 
-//         if(fidnitem){
-//             await Invoices.update({status: 0}, {where:{id: req.params.id}});
-//             res.status(200).json('cancel invoice done !');
-//         }else{
-//             res.status(500).json('cancel invoice error !'); 
-//         }
-
-//     }catch(error){
-//         res.status(200).json(err);
-//     }
-// }
+        }catch (err){
+            res.status(500).json(err);
+        }
+    });
 
 module.exports = router
