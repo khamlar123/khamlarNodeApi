@@ -20,7 +20,8 @@ content-type: application/json
     "qty":10,
     "dsc": "sdasasd",
     "variand": "asdasd",
-    "active": true 
+    "image": "abce.png",
+    "active": true
 }
 ###
 
@@ -38,5 +39,7 @@ Content-Type: : application/json
     "qty":10,
     "dsc": "sdasasd",
     "variand": "asdasd",
+    "image": "abce.png",
+    "active": true
 
 }

@@ -11,7 +11,7 @@ ProductDetails.belongsTo(Products, {foreignKey: 'productId'});
 const multer  = require('multer')
 const fileStorageEngine = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'uploads/')
+        cb(null, 'uploads')
       },
       filename: function (req, file, cb) {
         const uniqueSuffix =  Date.now() + '-' + Math.round(Math.random() * 1E9)
@@ -32,12 +32,32 @@ const upload = multer({ storage: fileStorageEngine});
 router.post('/product/add-product', upload.single('image'), async(req, res) => {
     try{
         var  {prodName, price, qty, dsc, variand, active} = req.body;
-        const product = await Products.create({prodName, price, qty, active});
+        const product = await Products.create({prodName, price, qty,image: req.file.filename, active});
         if(product.id > 0){
             let id = product.id;
             await ProductDetails.create({dsc, variand,productId: id});
             res.status(200).json(product);
         }
+    }catch(err){
+        res.status(500).json(err);
+    }
+});
+
+router.put('/product/edit-product', upload.single('image'), async(req, res) => {
+    try{
+        const imgName = req.file.filename;
+        const model = {id, prodName, price, qty} = req.body;
+        const deltelModal = {id, dsc, variand} = req.body;
+        const findItem = await Products.findByPk(model.id);   
+
+        if(findItem){
+        const updateRes = await Products.update({prodName: model.prodName,price: model.price, qty: model.qty,image: imgName}, {where: {id:model.id}});
+        const detail = await ProductDetails.update(deltelModal, {where: {productId:model.id}});
+        (updateRes && detail)? res.status(200).send('Update Done !'): res.status(500).send('Update error!');
+        }else{
+        res.status(500).send('not have user');
+        }
+
     }catch(err){
         res.status(500).json(err);
     }
@@ -113,26 +133,6 @@ router.get('/product/:id', async(req, res) => {
         // }else{
         //     res.status(500).send('error');
         // }
-
-    }catch(err){
-        res.status(500).json(err);
-    }
-});
-
-router.put('/product/edit-product', async(req, res) => {
-    try{
-
-        const model = {id, prodName, price, qty} = req.body;
-        const deltelModal = {id, dsc, variand} = req.body;
-        const findItem = await Products.findByPk(model.id);   
-
-        if(findItem){
-        const updateRes = await Products.update(model, {where: {id:model.id}});
-        const detail = await ProductDetails.update(deltelModal, {where: {productId:model.id}});
-        (updateRes && detail)? res.status(200).send('Update Done !'): res.status(500).send('Update error!');
-        }else{
-        res.status(500).send('not have user');
-        }
 
     }catch(err){
         res.status(500).json(err);
