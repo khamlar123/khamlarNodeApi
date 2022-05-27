@@ -14,7 +14,7 @@ content-type: application/json
     "fristName": "prodName",
     "lastName":"aadsad",
     "email":"asdasd",
-    "phoneNo": "0209999999",
+    "phoneNo": "0209999999"
 
 }
 ###

@@ -1,0 +1,45 @@
+GET http://localhost:3030/api/invoice/get-invoices HTTP/1.1
+###
+
+GET http://localhost:3030/api/invoice/1 HTTP/1.1
+###
+
+GET http://localhost:3030/api/invoices/get-invoicesnormal HTTP/1.1
+###
+
+GET http://localhost:3030/api/invoices/get-invoicescancel HTTP/1.1
+###
+
+POST http://localhost:3030/api/invoice/add-invoice HTTP/1.1
+content-type: application/json
+Token: ''
+Method: POST
+{
+"total": 1000,
+"status": 1,
+"invoiceType": 1,
+"bankName": 1,
+"userId": 1,
+"discount": 0,
+"cutomerId": 1,
+ "productList" :[
+     {
+         "productId":1,
+         "qty": 2,
+         "price": 5555,
+         "productName": "prodName",
+     },
+          {
+         "productId":2,
+         "qty": 2,
+         "price": 5555,
+         "productName": "aaaafasdasdas",
+     },
+          {
+         "productId":3,
+         "qty": 2,
+         "price": 5555,
+         "productName": "bbbbb",
+     }
+ ]
+}

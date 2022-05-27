@@ -1,48 +1,53 @@
 
-const {  DataTypes } = require("sequelize");
-const db = require("../db/database");
+const { sequelize, DataTypes } = require("../db/database");
+const Customer = require("../models/customer")(sequelize, DataTypes);
+const router = require("express").Router();
 
-// convert model res
-const Cutomer = db.define('Customer', {
-    fristName: DataTypes.STRING,
-    lastName: DataTypes.STRING,
-    email: DataTypes.STRING,
-    phoneNo: DataTypes.STRING
+router.get("/customer/get-customer", async (req, res) => {
+    try {
+        const filterItems = await Customer.findAll();
+        (filterItems) ? res.status(200).json(filterItems) : res.status(500).json([]);
+    } catch (err) {
+        res.status(500).json(err);
+    }
 });
 
-const findAll = async (req, res) => {
-    const getAllCutomer = await Cutomer.findAll();
-    res.status(200).json(getAllCutomer);
-}
+router.get("/customer/:id", async (req, res) => {
+    try {
+        let { id } = req.params;
+        const findItem = await Customer.findOne({ where: { id: id } });
+        (findItem) ? res.status(200).json(findItem) : res.status(200).json([]);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
 
-const findOne = async (req, res) => {
-    let {id} = req.params;
-    const getOneCutomer = await Cutomer.findByPk(id);
-    res.status(200).json(getOneCutomer);
-}
+router.post("/customer/add-customer", async (req, res) => {
+    try {
+        const cut = await Customer.create(req.body);
+       ( cut)? res.status(200).json("add customer done !"): res.status(500).json([]);
+    } catch (error) {
+        res.status(500).json(error);
+    }
+});
 
-const addCustomer = async (req, res) => {
-    const {fristName, lastName, email, phoneNo} = req.body;
-     await Cutomer.create({fristName, lastName, email, phoneNo});
-    res.status(200).send('add customer done !');
-}
+router.delete("/customer/:id", async (req, res) => {
+    try {
+        const cut = await Customer.destroy({ where: { id: req.params.id } });
+        (cut)? res.status(200).json("delete customer done !"):res.status(500).json([]);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
 
-const deleteCustomer = async (req, res) => {
-    const {id} = req.params;
-    await Cutomer.destroy({where:{id:id}});
-    res.status(200).send('delete done !');
-}
+router.put("/customer/edit-customer", async (req, res) => {
+    try {
+        const updateModal = ({ id, fristName, lastName, email, phoneNo } = req.req);
+       const cut = await Cutomer.update(updateModal, { where: { id: updateModal.id } });
+       (cut) ? res.status(200).send("update done !"):res.status(500).json([]);
+    } catch (err){
+        res.status(500).json(err);
+    }
+});
 
-const updateCustomer = async (req, res) => {
-    const updateModal = {id, fristName, lastName, email, phoneNo} = req.req;
-    await Cutomer.update(updateModal, {where:{id:updateModal.id}});
-    res.status(200).send('update done !');
-}
-
-module.exports ={
-    findAll,
-    findOne,
-    addCustomer,
-    deleteCustomer,
-    updateCustomer,
-}
+module.exports = router;

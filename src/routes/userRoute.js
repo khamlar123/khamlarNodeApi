@@ -1,87 +1,99 @@
 
-const {  DataTypes } = require("sequelize");
-const db = require("../db/database");
+const { sequelize, DataTypes } = require('../db/database');
+const User = require('../models/user')(sequelize, DataTypes);
+const route = require('express').Router();
 const base64 = require('../security/endCode');
 
-// convert model res
-const database = db.define('Users', {
-      firstName: DataTypes.STRING,
-      lastName: DataTypes.STRING,
-      email: DataTypes.STRING,
-      password: DataTypes.STRING,
-})
 
-
-const addUser = async (req, res) => {
-    const  {firstName, lastName, email, password} = req.body;
-    const endCode = base64.set(password.toString());
-    const key = (await endCode).toString() ;
-    const user = await  database.create({firstName, lastName, email, password: key});
-    res.status(200).json(user);
-}
-
-const findAll = async (req, res) => {
-  const {count, skip} = req.params;
-    const users = await  database.findAndCountAll({
-      where:{},
-      offset: Number(skip),
-      limit: Number(count),
-    });
-    res.status(200).json(users);
-}
-
-const findOne = async (req, res) => {
-    let {id} = req.params;
-    const user = await database.findByPk(id);
-    res.status(200).json(user);
-}
-
-const deleteUser = async(req, res) => {
-    let {id} = req.params;
-    await database.destroy({where: {id:id}});
-    // const deleteList =  await database.destroy({where: {id:[1,2,3,4]}});
-    res.status(200).json('is deleted !');
-}
-
-  const updateUser = async(req, res) => {
-    const model = {id, firstName, lastName, email, password} = req.body;
-    const findItem = await database.findByPk(model.id);     
-    if(findItem){
-      const endCode = base64.set(password.toString());
-      const key = (await endCode).toString();
-      model.password = key;
-     const updateRes = await database.update(model, {where: {id:model.id}});
-     res.status(200).json(updateRes);
-    }else{
-      res.status(500).send('not have user');
+route.get('/users/get-user/:count/:skip', async(req, res) => {
+    try{
+      const {count, skip} = req.params;
+        const users = await  User.findAndCountAll({
+          where:{},
+          offset: Number(skip),
+          limit: Number(count),
+        });
+      res.status(200).json(users);
+    
+    }catch (err){
+        res.status(200).json(err);
     }
-  }
+});
 
-  const changePassword = async (req, res) => {
-    const {email, password, newPassword} = req.body;
-    const findUser = await database.findOne({where:{email:email}})
-    if(findUser){
-      let decode = (await base64.get(findUser.dataValues.password)).toString();
-      if(decode === password){
-        const endCode = base64.set(newPassword.toString());
-        const key = (await endCode).toString();
-        const updatePassword = await database.update({password:key},{where: {email:email}});
-        res.status(200).json(updatePassword);
+route.post('/user/add-user', async(req, res) => {
+    try{
+        const  {firstName, lastName, email, password} = req.body;
+        const endCode = base64.set(password.toString());
+        const key = (await endCode).toString() ;
+        await  User.create({firstName, lastName, email, password: key});
+        res.status(200).json('add user done !');
+    }catch (err){
+        res.status(500).json(err)
+    }
+});
+
+
+route.get('/user/:id', async(req, res) => {
+    try{
+      let {id} = req.params;
+      const user = await User.findByPk(id);
+      res.status(200).json(user);
+    }catch (err){
+      res.status(500).json(err)
+    }
+});
+
+route.delete('/user/:id', async(req, res) => {
+    try{
+      let {id} = req.params;
+      await User.destroy({where: {id:id}});
+      // const deleteList =  await database.destroy({where: {id:[1,2,3,4]}});
+      res.status(200).json('is deleted !');
+    }catch (err){
+      res.status(500).json(err);
+    }
+});
+
+
+route.put('/user/edit-user', async(req, res) => {
+    try{
+        const model = {id, firstName, lastName, email, password} = req.body;
+        const findItem = await User.findByPk(model.id);     
+          if(findItem){
+              const endCode = base64.set(password.toString());
+              const key = (await endCode).toString();
+              model.password = key;
+              const updateRes = await User.update(model, {where: {id:model.id}});
+              res.status(200).json(updateRes);
+          }else{
+              res.status(500).json('error');
+          }
+    }catch (err){
+      res.status(500).json(err);
+    }
+});
+
+route.post('/user/change-password', async(req, res) => {
+      try{
+          const {email, password, newPassword} = req.body;
+          const findUser = await User.findOne({where:{email:email}})
+          if(findUser){
+            let decode = (await base64.get(findUser.dataValues.password)).toString();
+            if(decode === password){
+              const endCode = base64.set(newPassword.toString());
+              const key = (await endCode).toString();
+              const updatePassword = await User.update({password:key},{where: {email:email}});
+              res.status(200).json(updatePassword);
+            }else{
+              res.status(500).json('password not match');
+            }
+          }else{
+            res.status(500).json('not have email !');
+          }
+      }catch{
+          res.status(500).json(err);
       }
-
-    }else{
-      res.status(500).send('email ro password invalid')
-    }
-
-  }
+});
 
 
-
-module.exports = {
-  addUser,
-  findAll,
-  findOne,
-  deleteUser,
-  updateUser,
-  changePassword
-};
+module.exports = route;

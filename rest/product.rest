@@ -4,11 +4,11 @@ GET http://localhost:3030/api/product/get-product HTTP/1.1
 ###
 
 #Get product Active Only
-GET http://localhost:3030/api/product/get-product-active
+GET http://localhost:3030/api/product/get-product-active HTTP/1.1
 ###
 
 #Get Only 1 item
-GET http://localhost:3030/api/product/3 HTTP/1.1
+GET http://localhost:3030/api/product/4 HTTP/1.1
 ###
 
 # Add product
@@ -20,7 +20,7 @@ content-type: application/json
     "qty":10,
     "dsc": "sdasasd",
     "variand": "asdasd",
-    "active": true
+    "active": true 
 }
 ###
 
