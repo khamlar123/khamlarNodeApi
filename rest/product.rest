@@ -21,7 +21,9 @@ content-type: application/json
     "dsc": "sdasasd",
     "variand": "asdasd",
     "image": "abce.png",
-    "active": true
+    "active": true,
+    "uidType": 1,
+    "value": "aaaaaaaa"
 }
 ###
 
@@ -33,13 +35,15 @@ DELETE http://localhost:3030/api/product/2 HTTP/1.1
 PUT http://localhost:3030/api/product/edit-product HTTP/1.1
 Content-Type: : application/json
 {
-    "id": 3,
-    "prodName": "prodName",
+    "id": 4,
+    "prodName": "khamlar",
     "price":1000,
     "qty":10,
     "dsc": "sdasasd",
     "variand": "asdasd",
     "image": "abce.png",
-    "active": true
+    "active": true,
+    "uidtype": 1,
+    "value": "aaaaaaaa"
 
 }

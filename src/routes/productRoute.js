@@ -2,39 +2,48 @@
 const { sequelize, DataTypes } = require('../db/database');
 const Products = require('../models/product')(sequelize, DataTypes);
 const ProductDetails = require('../models/product_detail')(sequelize, DataTypes);
+const Uids = require('../models/uid')(sequelize, DataTypes);
 const router = require('express').Router();
 Products.hasOne(ProductDetails, { foreignKey: 'productId' });
 ProductDetails.belongsTo(Products, {foreignKey: 'productId'});
 
+Products.hasMany(Uids, {foreignKey: 'productId'});
+Uids.belongsTo(Products, {foreignKey: 'productId'});
+
 // for img
-const multer  = require('multer')
+const multer  = require('multer');
+const uid = require('../models/uid');
 const fileStorageEngine = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'uploads')
-      },
-      filename: function (req, file, cb) {
+    },
+
+    filename: function (req, file, cb) {
         const uniqueSuffix =  Date.now() + '-' + Math.round(Math.random() * 1E9)
         cb(null,  uniqueSuffix + '-' +  file.originalname)
-      }
+    }
 }); 
 const upload = multer({ storage: fileStorageEngine, limits:{
     fileSize: 1024 * 1024 * 5
 }});
 // router.post('/uploadfile', upload.single('image') , (req, res) => {
-//     console.log('xxxxxxxxxxxxxxxxxxxxxx',req.file);
-//     console.log('zzzzzzzzzzzzzzzzzzzzzz',req.body);
-//     res.send('done !');
-// })
+    //     console.log('xxxxxxxxxxxxxxxxxxxxxx',req.file);
+    //     console.log('zzzzzzzzzzzzzzzzzzzzzz',req.body);
+    //     res.send('done !');
+    // })
 // end img
 
 router.post('/product/add-product', upload.single('image'), async(req, res) => {
     try{
-        var  {prodName, price, qty, dsc, variand, active} = req.body;
+        var  {prodName, price, qty, dsc, variand, active, uidType, value} = req.body;
         const product = await Products.create({prodName, price, qty,image: req.file.filename, active});
         if(product.id > 0){
             let id = product.id;
             await ProductDetails.create({dsc, variand,productId: id});
+            await Uids.create({uidType: uidType, value: value, productId: id});
             res.status(200).json(product);
+            
+            
         }
     }catch(err){
         res.status(500).json(err);
@@ -46,13 +55,16 @@ router.put('/product/edit-product', upload.single('image'), async(req, res) => {
         const imgName = req.file.filename;
         const model = {id, prodName, price, qty} = req.body;
         const deltelModal = {id, dsc, variand} = req.body;
+        const uidModal = {uidtype, value} = req.body;
+
         const findItem = await Products.findByPk(model.id);   
         if(findItem){
-        const updateRes = await Products.update({prodName: model.prodName,price: model.price, qty: model.qty,image: imgName}, {where: {id:model.id}});
-        const detail = await ProductDetails.update(deltelModal, {where: {productId:model.id}});
-        (updateRes && detail)? res.status(200).send('Update Done !'): res.status(500).send('Update error!');
+            const updateRes = await Products.update({prodName: model.prodName,price: model.price, qty: model.qty,image: imgName}, {where: {id:model.id}});
+            const detail = await ProductDetails.update(deltelModal, {where: {productId:model.id}});
+            const uid = await Uids.update(uidModal, {where:{productId: model.id}});
+            (updateRes && detail && uid)? res.status(200).send('Update Done !'): res.status(500).send('Update error!');
         }else{
-        res.status(500).send('not have user');
+            res.status(500).send('not have user');
         }
     }catch(err){
         res.status(500).json(err);
@@ -64,9 +76,10 @@ router.get('/product/get-product', async (req, res) => {
         const tasks = await Products.findAll({ 
             where:{},
             include: [
-                {model: ProductDetails}
+                ProductDetails,
+                Uids
             ]});
-        res.status(200).json(tasks);
+        (tasks)? res.status(200).json(tasks):res.status(500).json([]);
 
         //sty1
         //const products = await  Products.findAll();
@@ -81,7 +94,6 @@ router.get('/product/get-product', async (req, res) => {
         //         res.status(500).send('error !');
         //     }
 
-
     }catch(err){
         res.status(500).json(err);
     }
@@ -92,9 +104,10 @@ router.get('/product/get-product-active', async(req, res) => {
         const tasks = await Products.findAll({ 
             where:{active: true},
             include: [
-                {model: ProductDetails}
+                ProductDetails,
+                Uids
             ]});
-        res.status(200).json(tasks);
+        (tasks)? res.status(200).json(tasks):  res.status(200).json([]);
     }catch(err){
         res.status(500).json(err);
     }
@@ -107,7 +120,8 @@ router.get('/product/:id', async(req, res) => {
         const findProduct = await Products.findOne({ 
             where:{id:id},
             include:[
-                {model: ProductDetails}
+                ProductDetails,
+                Uids
             ]
         });
        (findProduct)? res.status(200).json(findProduct):res.status(500).json('error') ;

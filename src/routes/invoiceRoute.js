@@ -115,4 +115,6 @@ Invoices.belongsTo(Customer, {foreignKey: 'cutomerId'})
         }
     });
 
+    
+
 module.exports = router

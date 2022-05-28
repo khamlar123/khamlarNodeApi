@@ -1,7 +1,7 @@
 GET http://localhost:3030/api/users/get-user/10/0 HTTP/1.1
 
 ###
-GET http://localhost:3030/api/user/1 HTTP/1.1
+GET http://localhost:3030/api/user/3 HTTP/1.1
 
 ###
 POST http://localhost:3030/api/user/add-user HTTP/1.1
@@ -16,14 +16,13 @@ Method: POST
 }
 
 ###
-DELETE http://localhost:3030/api/user/3 HTTP/1.1
+DELETE http://localhost:3030/api/user/2 HTTP/1.1
 
 ###
 
 PUT http://localhost:3030/api/user/edit-user HTTP/1.1
 Content-Type: : application/json
 {
-
     "id": 1,
     "firstName": "khamlar33333333333",
     "lastName":"aaabbccddd",

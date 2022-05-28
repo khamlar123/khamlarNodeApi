@@ -42,9 +42,9 @@ router.delete("/customer/:id", async (req, res) => {
 
 router.put("/customer/edit-customer", async (req, res) => {
     try {
-        const updateModal = ({ id, fristName, lastName, email, phoneNo } = req.req);
-       const cut = await Cutomer.update(updateModal, { where: { id: updateModal.id } });
-       (cut) ? res.status(200).send("update done !"):res.status(500).json([]);
+        const updateModal = { id, fristName, lastName, email, phoneNo } = req.body;
+        const cut = await Customer.update(updateModal, {where:{ id: updateModal.id }});
+        (cut)? res.status(200).send("update done !") : res.status(500).json([]);
     } catch (err){
         res.status(500).json(err);
     }
