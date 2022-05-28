@@ -4,7 +4,6 @@ const User = require('../models/user')(sequelize, DataTypes);
 const route = require('express').Router();
 const base64 = require('../security/endCode');
 
-
 route.get('/users/get-user/:count/:skip', async(req, res) => {
     try{
       const {count, skip} = req.params;
@@ -32,7 +31,6 @@ route.post('/user/add-user', async(req, res) => {
     }
 });
 
-
 route.get('/user/:id', async(req, res) => {
     try{
       let {id} = req.params;
@@ -53,7 +51,6 @@ route.delete('/user/:id', async(req, res) => {
       res.status(500).json(err);
     }
 });
-
 
 route.put('/user/edit-user', async(req, res) => {
     try{
@@ -94,6 +91,5 @@ route.post('/user/change-password', async(req, res) => {
           res.status(500).json(err);
       }
 });
-
 
 module.exports = route;

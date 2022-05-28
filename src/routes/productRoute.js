@@ -17,7 +17,9 @@ const fileStorageEngine = multer.diskStorage({
         cb(null,  uniqueSuffix + '-' +  file.originalname)
       }
 }); 
-const upload = multer({ storage: fileStorageEngine});
+const upload = multer({ storage: fileStorageEngine, limits:{
+    fileSize: 1024 * 1024 * 5
+}});
 // router.post('/uploadfile', upload.single('image') , (req, res) => {
 //     console.log('xxxxxxxxxxxxxxxxxxxxxx',req.file);
 //     console.log('zzzzzzzzzzzzzzzzzzzzzz',req.body);

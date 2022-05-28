@@ -73,30 +73,20 @@ const base64 = require('../security/endCode');
       }else{
         res.status(500).json('email, lastName, firstName invalid !')
       }
-    
     }catch (err){
       res.status(500).json(err)
     }
-});
-
-
-
-
+  });
 
   function makeid(length) {
     var result           = '';
     var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()<>\/|';
     var charactersLength = characters.length;
     for ( var i = 0; i < length; i++ ) {
-      result += characters.charAt(Math.floor(Math.random() * 
-    charactersLength));
+      result += characters.charAt(Math.floor(Math.random() *  charactersLength));
     }
     return result;
   }
-
-  
-
-
 
 
 module.exports =  router;

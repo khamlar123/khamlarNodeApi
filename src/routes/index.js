@@ -5,11 +5,6 @@ const invoiceApi = require('./invoiceRoute');
 const loginApi = require('./loginRoute');
 const router = require('express').Router();
 
-// // url for login
-// router.post('/login', loginController.login);
-// router.post('/reset-password', loginController.resetPassword);
-
-
 router.use(userApi);
 router.use(producctApi);
 router.use(customerApi);
