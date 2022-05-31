@@ -12,7 +12,9 @@ Method: POST
     "firstName": "khamlar",
     "lastName":"aaabbccddd",
     "email":"1234@1234.com",
-    "password": "123456"
+    "password": "123456",
+    "telegramToken": "5002187453:AAHbW4_2lqwc849IH8r-xJlV-iykC74RDME",
+     "chat_id": 2112029642
 }
 
 ###
@@ -27,7 +29,9 @@ Content-Type: : application/json
     "firstName": "khamlar33333333333",
     "lastName":"aaabbccddd",
     "email":"1234@1234.com",
-    "password": "123456"
+    "password": "123456",
+    "telegramToken": "5002187453:AAHbW4_2lqwc849IH8r-xJlV-iykC74RDME",
+     "chat_id": 2112029642
 }
 ###
 

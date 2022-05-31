@@ -35,8 +35,8 @@ const upload = multer({ storage: fileStorageEngine, limits:{
 
 router.post('/product/add-product', upload.single('image'), async(req, res) => {
     try{
-        var  {prodName, price, qty, dsc, variand, active, uidType, value} = req.body;
-        const product = await Products.create({prodName, price, qty,image: req.file.filename, active});
+        var  {prodName, price, qty, dsc, variand, active, uidType, value,categoryId} = req.body;
+        const product = await Products.create({prodName, price, qty,image: req.file.filename, active, categoryId});
         if(product.id > 0){
             let id = product.id;
             await ProductDetails.create({dsc, variand,productId: id});
@@ -53,13 +53,13 @@ router.post('/product/add-product', upload.single('image'), async(req, res) => {
 router.put('/product/edit-product', upload.single('image'), async(req, res) => {
     try{
         const imgName = req.file.filename;
-        const model = {id, prodName, price, qty} = req.body;
+        const model = {id, prodName, price, qty, categoryId} = req.body;
         const deltelModal = {id, dsc, variand} = req.body;
         const uidModal = {uidtype, value} = req.body;
 
         const findItem = await Products.findByPk(model.id);   
         if(findItem){
-            const updateRes = await Products.update({prodName: model.prodName,price: model.price, qty: model.qty,image: imgName}, {where: {id:model.id}});
+            const updateRes = await Products.update({prodName: model.prodName,price: model.price, qty: model.qty,image: imgName, categoryId:model.categoryId}, {where: {id:model.id}});
             const detail = await ProductDetails.update(deltelModal, {where: {productId:model.id}});
             const uid = await Uids.update(uidModal, {where:{productId: model.id}});
             (updateRes && detail && uid)? res.status(200).send('Update Done !'): res.status(500).send('Update error!');

@@ -8,7 +8,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      parenid: {
+      parenId: {
         type: Sequelize.INTEGER
       },
       cateName: {

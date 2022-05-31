@@ -21,6 +21,12 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
+      telegramToken: {
+        type: Sequelize.STRING
+      },
+      chat_id: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

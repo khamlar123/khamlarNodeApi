@@ -21,10 +21,10 @@ route.get('/users/get-user/:count/:skip', async(req, res) => {
 
 route.post('/user/add-user', async(req, res) => {
     try{
-        const  {firstName, lastName, email, password} = req.body;
+        const  {firstName, lastName, email, password,telegramToken, chat_id} = req.body;
         const endCode = base64.set(password.toString());
         const key = endCode.toString() ;
-        await  User.create({firstName, lastName, email, password: key});
+        await  User.create({firstName, lastName, email, password: key, telegramToken, chat_id});
         res.status(200).json('add user done !');
     }catch (err){
         res.status(500).json(err)
@@ -54,7 +54,7 @@ route.delete('/user/:id', async(req, res) => {
 
 route.put('/user/edit-user', async(req, res) => {
     try{
-        const model = {id, firstName, lastName, email, password} = req.body;
+        const model = {id, firstName, lastName, email, password, telegramToken, chat_id} = req.body;
         const findItem = await User.findByPk(model.id);     
           if(findItem){
               const endCode = base64.set(password.toString());
