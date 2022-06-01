@@ -56,6 +56,4 @@ router.delete('/categories/:id', async (req, res) => {
     }
 });
 
-
-
 module.exports = router;

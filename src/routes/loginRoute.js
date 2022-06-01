@@ -3,7 +3,6 @@ const router = require('express').Router();
 const { sequelize, DataTypes } = require('../db/database');
 const User = require('../models/user')(sequelize, DataTypes);
 const base64 = require('../security/endCode');
-const axios = require('axios');
 const message = require('../security/telegram');
 
 

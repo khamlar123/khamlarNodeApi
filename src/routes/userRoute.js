@@ -3,6 +3,7 @@ const { sequelize, DataTypes } = require('../db/database');
 const User = require('../models/user')(sequelize, DataTypes);
 const route = require('express').Router();
 const base64 = require('../security/endCode');
+const message = require ('../security/telegram.js');
 
 route.get('/users/get-user/:count/:skip', async(req, res) => {
     try{
@@ -25,7 +26,15 @@ route.post('/user/add-user', async(req, res) => {
         const endCode = base64.set(password.toString());
         const key = endCode.toString() ;
         await  User.create({firstName, lastName, email, password: key, telegramToken, chat_id});
+
+        postModal  ={
+          token: '5002187453:AAHbW4_2lqwc849IH8r-xJlV-iykC74RDME',
+          chat_id : '-1001520203517',
+          text : 'has add new user, user name is: ' + firstName 
+        }
+
         res.status(200).json('add user done !');
+        message.sent(postModal);
     }catch (err){
         res.status(500).json(err)
     }
