@@ -10,6 +10,10 @@ ProductDetails.belongsTo(Products, {foreignKey: 'productId'});
 Products.hasMany(Uids, {foreignKey: 'productId'});
 Uids.belongsTo(Products, {foreignKey: 'productId'});
 
+// const Sequelize = require("sequelize");
+// const Op = Sequelize.Op;
+
+
 // for img
 const multer  = require('multer');
 const uid = require('../models/uid');
@@ -166,5 +170,41 @@ router.delete('/product/:id', async(req, res) => {
         res.status(500).json(err);
     }
 });
+
+// router.get("/products/:kw/:count/:skip", async (req, res) => {
+//     //mode1
+//     // const filterItems = await products.findAll({
+  
+//     //   include:[
+//     //   productPrices,
+//     //   preorder,
+//     //   { model: productCateogries, include: [categoies] }
+//     // ]});
+//     // const resl = filterItems.map(m => m.dataValues).reverse().filter(f => f.description.toLowerCase().includes(req.params.kw.toLowerCase()));
+//     // const masterRes = {count : resl.length,data : resl.splice(Number(req.params.skip), Number(req.params.count))};
+//     // res.status(200).json(masterRes);
+  
+//     //mode2
+//     // const search = await sequelize.query(`SELECT * FROM Products WHERE description LIKE '%${req.params.kw}%'`, { raw: true });
+//     // res.status(200).json(search[0]);
+  
+//     const filterItems = await products.findAndCountAll({
+//       where: {
+//         [Op.or]: [
+//           { description: { [Op.like]: "%" + req.params.kw + "%" } },
+//           { type: { [Op.like]: "% " + req.params.kw + "%" } },
+//         ],
+//         [Op.and]: [{status: 1}]
+//       },
+//       limit: +req.params.count,
+//       offset: +req.params.skip,
+//       include: [
+//         productPrices,
+//         preorder,
+//         { model: productCateogries, include: [categoies] },
+//       ],
+//     });
+//     res.status(200).json(filterItems);
+//   });
 
 module.exports = router;
