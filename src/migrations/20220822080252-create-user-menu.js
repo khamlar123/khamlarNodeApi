@@ -1,36 +1,21 @@
 'use strict';
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('invoices', {
+    await queryInterface.createTable('userMenus', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      invocieNo: {
-        type: Sequelize.STRING
-      },
-      total: {
-        type: Sequelize.DOUBLE
-      },
-      status: {
-        type: Sequelize.INTEGER
-      },
-      invoiceType: {
-        type: Sequelize.INTEGER
-      },
-      bankName: {
-        type: Sequelize.STRING
-      },
       userId: {
         type: Sequelize.INTEGER
       },
-      discount: {
-        type: Sequelize.DOUBLE
+      roleId: {
+        type: Sequelize.INTEGER
       },
-      cutomerId: {
-        type:Sequelize.INTEGER
+      status: {
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,
@@ -43,6 +28,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('invoices');
+    await queryInterface.dropTable('userMenus');
   }
 };

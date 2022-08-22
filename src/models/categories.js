@@ -3,15 +3,18 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class category extends Model {}
-  category.init({
-    parenId: DataTypes.INTEGER,
+  class categories extends Model {
+
+  }
+  categories.init({
     cateName: DataTypes.STRING,
     orderIndex: DataTypes.INTEGER,
-    icon: DataTypes.STRING
+    parentId: DataTypes.INTEGER,
+    status: DataTypes.INTEGER,
+    url: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'categories',
   });
-  return category;
+  return categories;
 };
