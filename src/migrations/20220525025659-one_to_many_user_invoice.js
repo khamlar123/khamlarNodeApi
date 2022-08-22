@@ -8,7 +8,7 @@ module.exports = {
       type: 'foreign key',
       name: 'invoices_user_association',
       references: {
-        table: 'users',
+        table: 'Users',
         field: 'id'
       }
     })
@@ -21,7 +21,7 @@ module.exports = {
       type: 'foreign key',
       name: 'invoices_user_association',
       references: {
-        table: 'users',
+        table: 'Users',
         field: 'id'
       }
     })

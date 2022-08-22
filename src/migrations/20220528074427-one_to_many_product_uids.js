@@ -7,7 +7,7 @@ module.exports = {
       type: 'foreign key',
       name: 'product_associate_one_to_mayny_uids',
       references: {
-        table: 'products',
+        table: 'Products',
         field: 'id'
       }
     })
@@ -19,7 +19,7 @@ module.exports = {
       type: 'foreign key',
       name: 'product_associate_one_to_mayny_uids',
       references: {
-        table: 'products',
+        table: 'Products',
         field: 'id'
       }
     })

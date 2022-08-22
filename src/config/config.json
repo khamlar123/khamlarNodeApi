@@ -1,21 +1,21 @@
 {
   "development": {
     "username": "root",
-    "password": null,
+    "password": "khamlar123",
     "database": "usuario_db",
     "host": "localhost",
     "dialect": "mysql"
   },
   "test": {
     "username": "root",
-    "password": null,
+    "password": "khamlar123",
     "database": "usuario_db",
     "host": "localhost",
     "dialect": "mysql"
   },
   "production": {
     "username": "root",
-    "password": null,
+    "password": "khamlar123",
     "database": "usuario_db",
     "host": "localhost",
     "dialect": "mysql"
