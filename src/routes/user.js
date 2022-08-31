@@ -1,6 +1,7 @@
 'use strict';
-const Users = require('../models/user')(sequelize, DataTypes);
+
 const { sequelize, DataTypes } = require("../db/database");
+const Users = require('../models/user')(sequelize, DataTypes);
 const router = require('express').Router();
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
