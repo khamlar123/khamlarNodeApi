@@ -2,24 +2,24 @@
 
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.addConstraint('roles', {
-      fields: ['userId'],
+    await queryInterface.addConstraint('shipments', {
+      fields: ['carId'],
       type: 'foreign key',
-      name: 'set_role_association',
+      name: 'set_car_association',
       references: {
-        table: 'users',
+        table: 'cars',
         field: 'id'
       }
     });
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.removeConstraint('roles', {
-      fields: ['userId'],
+    await queryInterface.removeConstraint('shipments', {
+      fields: ['carId'],
       type: 'foreign key',
-      name: 'set_role_association',
+      name: 'set_car_association',
       references: {
-        table: 'users',
+        table: 'cars',
         field: 'id'
       }
     });
