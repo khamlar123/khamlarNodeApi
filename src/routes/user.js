@@ -2,22 +2,11 @@
 
 const { sequelize, DataTypes } = require("../db/database");
 const Users = require('../models/user')(sequelize, DataTypes);
+const Sh = require('./shared');
 const router = require('express').Router();
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 
-const multer = require("multer");
-const fileStorageEngine = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "./src/public/images");
-  },
-
-  filename: function (req, file, cb) {
-    // const uniqueSuffix =  Date.now() + '-' + Math.round(Math.random() * 1E9)
-    cb(null, file.originalname);
-  },
-});
-const upload = multer({ storage: fileStorageEngine });
 
 router.get('/getuser', async(req, res) => {
 try{
@@ -38,7 +27,7 @@ try{
 }
 });
 
-router.post('/adduser',upload.single("profile"), async(req, res) => {
+router.post('/adduser',Sh.uploadImgFunc().single("profile"), async(req, res) => {
 try{
     const {firstName,lastName,userName,password,profile} = req.body;
     const addUser = await Users.create({
@@ -64,7 +53,7 @@ router.delete('/deleteuser', async(req, res) => {
     }
 });
 
-router.put('/edituser',upload.single("profile"), async(req, res) => {
+router.put('/edituser',Sh.uploadImgFunc().single("profile"), async(req, res) => {
     try{
         const {id,firstName,lastName,userName,password,profile} = req.body;
         const addUser = await Users.update({
@@ -77,6 +66,25 @@ router.put('/edituser',upload.single("profile"), async(req, res) => {
         {where:{id:Number(id)}}
         );
         res.status(200).json(addUser.id);
+    }catch(e){
+        res.status(500).json(e);
+    }
+});
+
+router.post('/login', async(req, res) => { 
+    try{    
+        const {userName, password} = req.body;
+        const user = await User.findOne({
+            where:{
+                [Op.and]:[
+                    {username:userName},
+                    {password:password},
+                ]
+            }
+        });
+
+        res.status(200).json(user);
+
     }catch(e){
         res.status(500).json(e);
     }

@@ -64,7 +64,7 @@ router.put('/editcustomer', async(req, res) => {
     }
 
    await CustomersAddress.destroy({where:{customerId:id}});
-   addressIds.forEach(itx => {
+   addressIds.forEach(async itx => {
     await CustomersAddress.create({customerId:id,addressId:itx});
    });
 
