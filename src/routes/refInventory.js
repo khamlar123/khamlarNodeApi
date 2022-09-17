@@ -7,7 +7,7 @@ const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 
 
-router.get('/getreftype', async(req, res) => {
+router.get('/get-reftype', async(req, res) => {
     try{
         const filterItems = await Reftype.findAll();
         res.status(200).json(filterItems);
@@ -16,7 +16,7 @@ router.get('/getreftype', async(req, res) => {
     }
 });
 
-router.post('/addreftype', async(req, res) => {
+router.post('/add-reftype', async(req, res) => {
     try{
         const {name, orderIndex} = req.body;
         const addItem = await Reftype.create({
@@ -29,7 +29,7 @@ router.post('/addreftype', async(req, res) => {
     }
 });
 
-router.put('/editreftype', async(req, res) => {
+router.put('/edit-reftype', async(req, res) => {
     try{
         const {name, orderIndex, id} = req.body;
         const addItem = await Reftype.update({
@@ -42,7 +42,7 @@ router.put('/editreftype', async(req, res) => {
     }
 });
 
-router.delete('/deletereftype', async(req, res) => {
+router.delete('/delete-reftype', async(req, res) => {
     try{
         const {typeid} = req.query;
         const deleteReftype = await Reftype.destroy({where:{id:typeid}});

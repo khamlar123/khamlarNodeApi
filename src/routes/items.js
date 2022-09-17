@@ -22,7 +22,7 @@ Refinventory.hasOne(Items, {foreignKey:'inventoryId'});
 Items.belongsTo(Refinventory, {foreignKey:'inventoryId'});
 
 
-router.get('/getitems', async(req, res) => {
+router.get('/get-items', async(req, res) => {
     try{
         const {kw, status} = req.query;
         const filterItems = await Items.findAll({
@@ -44,7 +44,7 @@ router.get('/getitems', async(req, res) => {
     }
 });
 
-router.post('/additem', async(req, res) => {
+router.post('/add-item', async(req, res) => {
     try{
         const {itemSizeId,barcode,trypeId,cutomerId,userId,from,to,status,remarks,inventoryId } = req.body;
         const addItems = await Items.create({
@@ -65,7 +65,7 @@ router.post('/additem', async(req, res) => {
     }
 });
 
-router.delete('/deleteitem', async(req, res) => {
+router.delete('/delete-item', async(req, res) => {
     try{
         const {itemid} = req.query; 
         const deleteitem = await Items.destroy({
@@ -77,7 +77,7 @@ router.delete('/deleteitem', async(req, res) => {
     }
 });
 
-router.post('/edititem', async(req, res) => {
+router.post('/edit-item', async(req, res) => {
     try{
         const {id,itemSizeId,barcode,trypeId,cutomerId,userId,from,to,status,remarks,inventoryId } = req.body;
         const update = await Items.update({

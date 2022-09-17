@@ -1,7 +1,6 @@
 'use strict';
 const jwt = require("jsonwebtoken");
 
-
 function uploadImgFunc() {
     const multer = require("multer");
     const fileStorageEngine = multer.diskStorage({
@@ -29,8 +28,6 @@ function setToken(data){
 function verifyToken(token) {
     return jwt.verify(token, "khamlarMasterToken");
 }
-
-
 
 module.exports = {
     uploadImgFunc,

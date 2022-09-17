@@ -7,7 +7,7 @@ const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 
 
-router.get('/getsize', async(req, res) => {
+router.get('/get-size', async(req, res) => {
     try{
         const filterItems = await Sizes.findAll();
         res.status(200).json(filterItems);
@@ -16,7 +16,7 @@ router.get('/getsize', async(req, res) => {
     }
 });
 
-router.post('/addsize', async(req, res) => {
+router.post('/add-size', async(req, res) => {
     try{
         const {height, width,weight} = req.body;
         const addItem = await Sizes.create({
@@ -30,7 +30,7 @@ router.post('/addsize', async(req, res) => {
     }
 });
 
-router.put('/editsize', async(req, res) => {
+router.put('/edit-size', async(req, res) => {
     try{
         const {height, width,weight, id} = req.body;
         const addItem = await Sizes.update({
@@ -44,7 +44,7 @@ router.put('/editsize', async(req, res) => {
     }
 });
 
-router.delete('/deletesize', async(req, res) => {
+router.delete('/delete-size', async(req, res) => {
     try{
         const {sizeid} = req.query;
         const deleteSize = await Sizes.destroy({where:{id:sizeid}});

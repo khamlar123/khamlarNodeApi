@@ -2,7 +2,6 @@
 const { sequelize, DataTypes } = require("../db/database");
 const Customers = require('../models/customers')(sequelize, DataTypes);
 const CustomersAddress = require('../models/customeraddress')(sequelize, DataTypes);
-
 Customers.hasMany(CustomersAddress, {foreignKey: "customerId"});
 CustomersAddress.belongsTo(Customers, {foreignKey: "customerId"});
 
@@ -11,7 +10,7 @@ const router = require('express').Router();
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 
-router.get('/getcustomer', async(req, res) => {
+router.get('/get-customer', async(req, res) => {
     try{
         const filterItems = await Customers.findAll({
             include:[{model:CustomersAddress}]
@@ -22,7 +21,7 @@ router.get('/getcustomer', async(req, res) => {
     }
 });
 
-router.get('/getcustomer', async(req, res) => {
+router.get('/get-customer', async(req, res) => {
     try{
         const {cid} = req.query;
         const filterItem = await Customers.findOne({
@@ -35,7 +34,7 @@ router.get('/getcustomer', async(req, res) => {
     }
 });
 
-router.post('/addcustomer', async(req, res) => {
+router.post('/add-customer', async(req, res) => {
     try{
         const {name, lastName, phone, addressIds} = req.body;
         const additem = await Customers.create({
@@ -52,25 +51,28 @@ router.post('/addcustomer', async(req, res) => {
     }
 });
 
-router.put('/editcustomer', async(req, res) => {
+router.put('/edit-customer', async(req, res) => {
     const {id, name, lastName, phone, addressIds} = req.body;
+    let x = [];
     const findCustomer = await Customers.findOne({where:{id:id}});
     if(findCustomer){
         const updateItem = await Customers.update({
             name: name, 
             lastName: lastName,
             phone: phone
-        }, {where:{id:id}})
+        }, {where:{id:id}});
+        x.push(updateItem);
     }
-
    await CustomersAddress.destroy({where:{customerId:id}});
    addressIds.forEach(async itx => {
-    await CustomersAddress.create({customerId:id,addressId:itx});
+        const addNew = await CustomersAddress.create({customerId:id,addressId:itx});
+        x.push(addNew);
    });
+   res.status(200).json(x);
 
 });
 
-router.delete('/deletecustomer', async(req, res) => {
+router.delete('/delete-customer', async(req, res) => {
     try{
         const {cid} = req.query;
         await CustomersAddress.destroy({where:{customerId:cid}});

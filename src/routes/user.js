@@ -8,7 +8,7 @@ const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 
 
-router.get('/getuser', async(req, res) => {
+router.get('/get-user', async(req, res) => {
 try{
     const getUser = await Users.findAll();
     res.status(200).json(getUser);
@@ -17,7 +17,7 @@ try{
 }
 });
 
-router.get('/getuser/byid', async(req, res) => {
+router.get('/get-user/byid', async(req, res) => {
 try{
     const userId = req.query;
     const findUser = await Users.findOne({where:{id:Number(userId)}});
@@ -27,7 +27,7 @@ try{
 }
 });
 
-router.post('/adduser',Sh.uploadImgFunc().single("profile"), async(req, res) => {
+router.post('/add-user',Sh.uploadImgFunc().single("profile"), async(req, res) => {
 try{
     const {firstName,lastName,userName,password,profile} = req.body;
     const addUser = await Users.create({
@@ -43,7 +43,7 @@ try{
 }
 });
 
-router.delete('/deleteuser', async(req, res) => {
+router.delete('/delete-user', async(req, res) => {
     try{
         const {id} = req.params;
         const deleteUser = await Users.destroy({where:{id:id}});
@@ -53,7 +53,7 @@ router.delete('/deleteuser', async(req, res) => {
     }
 });
 
-router.put('/edituser',Sh.uploadImgFunc().single("profile"), async(req, res) => {
+router.put('/edit-user',Sh.uploadImgFunc().single("profile"), async(req, res) => {
     try{
         const {id,firstName,lastName,userName,password,profile} = req.body;
         const addUser = await Users.update({

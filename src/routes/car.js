@@ -6,7 +6,7 @@ const router = require('express').Router();
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 
-router.get('/getcar', async(req, res) => {
+router.get('/get-car', async(req, res) => {
     try{
         const {kw} = req.query;
         const filterItems = await Car.findAll({
@@ -20,7 +20,7 @@ router.get('/getcar', async(req, res) => {
     }
 });
 
-router.post('/addcar', async(req, res) => {
+router.post('/add-car', async(req, res) => {
     try{
         const {carNumber, status,orderIndex,remarks,star} = req.body;
         const addcar = await Car.create({
@@ -36,7 +36,7 @@ router.post('/addcar', async(req, res) => {
     }
 });
 
-router.delete('/deletecar', async(req, res) => {
+router.delete('/delete-car', async(req, res) => {
     try{
         const {cid} =req.query;
         const deleteItem = await Car.destroy({where:{id:cid}});
@@ -46,7 +46,7 @@ router.delete('/deletecar', async(req, res) => {
     }
 });
 
-router.put('/updatecar', async(req, res) => {
+router.put('/update-car', async(req, res) => {
     try{
         const {carNumber, status,orderIndex,remarks,star,id} = req.body;
         const updateCar = await Car.update({
